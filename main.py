@@ -26,6 +26,7 @@ def main():
 
         # add new tetromino
         tetris.tetrominos.append(Tetromino(Shapes.I, 3, 1))
+        tetris.tetrominos.append(Tetromino(Shapes.I, 0, 4))
         # update occupancy
         for tetromino in tetris.tetrominos:
             for i in range(tetromino.row, tetromino.row + 4):
