@@ -30,3 +30,6 @@ TODO
 NOTES
 
     illegal move if going to draw in occupied space
+
+    matrix rotation for rotating pieces
+        https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/
