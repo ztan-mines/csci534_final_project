@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3
 
+import colors
 from board_cell import BoardCell
 
 class Tetris:
@@ -9,11 +10,12 @@ class Tetris:
     grid_x = 20
     grid_y = 50
     square_width = 50
+    tetrominos = []
     
     def __init__(self):
 
         # board is made of width * height BoardCells
         self.board = [
-            [BoardCell for _ in range(self.board_width)] 
+            [BoardCell(colors.WHITE) for _ in range(self.board_width)] 
             for _ in range(self.board_height)
         ]

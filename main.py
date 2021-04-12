@@ -3,6 +3,8 @@
 import pygame
 import colors
 from tetris import Tetris
+from tetromino import Tetromino
+from shapes import Shapes
 
 res = (800, 1080)
 
@@ -22,6 +24,17 @@ def main():
         # draw background
         screen.fill(colors.WHITE)
 
+        # add new tetromino
+        tetris.tetrominos.append(Tetromino(Shapes.I, 0, 1))
+        # update occupancy
+        for tetromino in tetris.tetrominos:
+            for i in range(tetromino.row, tetromino.row + 4):
+                for j in range(tetromino.col, tetromino.col + 4):
+                    if tetromino.shape[i-4][j-4].is_occupied:
+                        tetris.board[i][j].is_occupied = True
+                        tetris.board[i][j].color = tetromino.shape[i-4][j-4].color
+                        print(i, j)
+
         # draw board
         for i in range(tetris.board_height):
             for j in range(tetris.board_width):
@@ -40,6 +53,11 @@ def main():
                 )
 
                 # draw tetrominos
+                """
+                for ea tetromino
+                    start at start location
+                        for each row and column, draw color if occupied
+                """
                 if tetris.board[i][j].is_occupied:
                     pygame.draw.rect(
                         screen,

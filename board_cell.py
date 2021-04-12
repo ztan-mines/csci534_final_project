@@ -3,5 +3,9 @@
 import colors
 
 class BoardCell:
-    is_occupied = True
-    color = colors.WHITE
+
+    is_occupied = False
+    
+    def __init__(self, color):
+        self.color = color
+        self.is_occupied = False
