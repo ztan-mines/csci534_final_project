@@ -47,9 +47,9 @@ class Tetris:
     field = []
     height = 0
     width = 0
-    x = 100
+    x = 250
     y = 60
-    zoom = 20
+    zoom = 10
     figure = None
 
     def __init__(self, height, width):
