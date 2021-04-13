@@ -4,8 +4,9 @@ from shapes import Shapes
 
 class Tetromino:
 
-    def __init__(self, shape, row, col):
+    def __init__(self, shape, color, row, col):
         self.shape = shape
+        self.color = color
         self.row = row
         self.col = col
 
