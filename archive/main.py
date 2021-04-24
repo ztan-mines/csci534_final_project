@@ -85,6 +85,5 @@ def main():
         # update drawings
         pygame.display.flip()
   
-
 if __name__ == "__main__":
     main()

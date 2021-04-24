@@ -2,6 +2,7 @@
 
 import sys
 import pygame
+import numpy as np
 
 colors = {
     "BLACK": (0, 0, 0),
@@ -15,7 +16,11 @@ colors = {
     "CYAN": (0, 255, 255)
 }
 
-def display_board_state(path, res=(400, 540)):
+res = (400, 800)
+
+cell_dim = res[0]/12
+
+def display_board_state(path):
     """
     Displays a given board state graphically given its filepath
 
@@ -32,6 +37,19 @@ def display_board_state(path, res=(400, 540)):
     pygame.init()
     screen = pygame.display.set_mode(res)
 
+    # load text board into numpy array
+    board = []
+    while True:
+        
+        line = board_state_file.readline()
+        if line == '':  # end of file
+            break
+        
+        line = line.split()
+        board_row = [int(i) for i in line]
+        board.append(board_row)
+    board = np.array(board)
+
     # display board until window closed
     done = False
     while not done:
@@ -43,6 +61,30 @@ def display_board_state(path, res=(400, 540)):
 
         # draw background
         screen.fill(colors['WHITE'])
+
+        # draw board state
+        for row in range(20):
+            for col in range(10):
+
+                # determine how to draw cell (occupied or unoccupied)
+                color = colors["GRAY"]
+                no_fill = 1  # transparent rectangle
+                if board[row][col] == 1:  # cell is occupied
+                    color = colors["BLACK"]
+                    no_fill = 0  # filled rectangle
+
+                # draw cell
+                pygame.draw.rect(
+                    screen, 
+                    color, 
+                    [
+                        cell_dim * (col + 1), 
+                        cell_dim * (row + 2), 
+                        cell_dim, 
+                        cell_dim
+                    ], 
+                    no_fill
+                )
 
         # update drawings
         pygame.display.flip()
