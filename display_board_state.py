@@ -3,7 +3,7 @@
 import sys
 import pygame
 
-color = {
+colors = {
     "BLACK": (0, 0, 0),
     "WHITE": (255, 255, 255),
     "GRAY": (128, 128, 128),
@@ -15,7 +15,7 @@ color = {
     "CYAN": (0, 255, 255)
 }
 
-def display_board_state(path, res=(800, 1080)):
+def display_board_state(path, res=(400, 540)):
     """
     Displays a given board state graphically given its filepath
 
@@ -29,12 +29,23 @@ def display_board_state(path, res=(800, 1080)):
 
     # initialize
     board_state_file = open(path, 'r')
-    # pygame.init()
-    # screen = pygame.display.set_mode(res)
+    pygame.init()
+    screen = pygame.display.set_mode(res)
 
+    # display board until window closed
+    done = False
+    while not done:
 
-    # TODO: display board
-    pass
+        # check end
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+
+        # draw background
+        screen.fill(colors['WHITE'])
+
+        # update drawings
+        pygame.display.flip()
 
 
 if __name__ == "__main__":
