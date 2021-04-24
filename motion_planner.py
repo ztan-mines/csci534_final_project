@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-def main():
+def motion_planner():
     """
     load board state
     get tetromino
@@ -13,4 +13,4 @@ def main():
     pass
 
 if __name__ == "__main__":
-    main()
+    motion_planner()

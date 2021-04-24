@@ -4,6 +4,8 @@ import sys
 import pygame
 import numpy as np
 
+from read_board_state import read_board_state
+
 colors = {
     "BLACK": (0, 0, 0),
     "WHITE": (255, 255, 255),
@@ -32,23 +34,12 @@ def display_board_state(path):
         None: Output is a window displaying the board state
     """
 
-    # initialize
-    board_state_file = open(path, 'r')
+    # initialize pygame
     pygame.init()
     screen = pygame.display.set_mode(res)
 
     # load text board into numpy array
-    board = []
-    while True:
-        
-        line = board_state_file.readline()
-        if line == '':  # end of file
-            break
-        
-        line = line.split()
-        board_row = [int(i) for i in line]
-        board.append(board_row)
-    board = np.array(board)
+    board = read_board_state(path)
 
     # display board until window closed
     done = False
@@ -69,7 +60,7 @@ def display_board_state(path):
                 # determine how to draw cell (occupied or unoccupied)
                 color = colors["GRAY"]
                 no_fill = 1  # transparent rectangle
-                if board[row][col] == 1:  # cell is occupied
+                if board[row][col] == 1:  # cell is previously occupied
                     color = colors["BLACK"]
                     no_fill = 0  # filled rectangle
                 elif board[row][col] == 2:  # cell occupied by input tetromino
