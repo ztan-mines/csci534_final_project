@@ -72,6 +72,9 @@ def display_board_state(path):
                 if board[row][col] == 1:  # cell is occupied
                     color = colors["BLACK"]
                     no_fill = 0  # filled rectangle
+                elif board[row][col] == 2:  # cell occupied by input tetromino
+                    color = colors["CYAN"]
+                    no_fill = 0  # filled rectangle
 
                 # draw cell
                 pygame.draw.rect(
