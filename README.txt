@@ -19,12 +19,14 @@ Install pygame via pip (https://www.pygame.org/wiki/GettingStarted)
 TODO
 
     GUI
-
-    Game logic
+        display board state as colored board
 
     Task Planner
+        find all possible end states given start state
+        select end state with best score
 
     Motion Planner
+        print steps from start state to end state
 
 --------------------------------------------------------------------------------
 NOTES
