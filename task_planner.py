@@ -27,28 +27,66 @@ def task_planner(path, shape_num):
     board = read_board_state(path)
     print(board)
 
-    tetromino = Tetromino(shapes.shapes[int(shape_num)], -4, -2)
+    tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, -2)
 
     # create goal states
     for rot_num in range(4):  # for each unique rotation of shape (3)
+
+        print()
+        print()
         for row in tetromino.shape:
             print(row)
-        for loc_col in range(-2, 12):  # all possible columns tetromino can be in
-            
-            tetromino.col = loc_col
-            if _collision_exists(tetromino, board):
-                continue
 
-            while True:  # increment row until collision
+        for loc_col in range(-2, 12):  # all possible cols tetromino can be in
+        # for loc_col in range(0, 3):  # all possible cols tetromino can be in
+
+            print()
+            print("next col")
+            tetromino.row = -2  # new col, start at top
+            tetromino.col = loc_col
+
+            # find first valid row
+            invalid_col = False
+            while _collision_exists(tetromino, board):
+                if tetromino.row >= 20:
+                    invalid_col = True
+                    break
+                tetromino.row += 1
+            
+            if invalid_col:
+                print('invalid col')
+                continue
+            print('found first valid row')
+
+            # increment row until collision
+            while True:
                 tetromino.row += 1
                 if _collision_exists(tetromino, board):  # row not valid
                     tetromino.row -= 1  # go back to last valid row
-                    break  
-        tetromino.rotate()         
+                    break
+
 
             # TODO: draw end state
+            outboard = np.copy(board)
+            for trow in range(4):
+                for tcol in range(4):
+                    if tetromino.shape[trow][tcol] == 2:  # collision matters (cell found)
+
+                        # determine absolute location of tetris cell in board
+                        brow = trow + tetromino.row
+                        bcol = tcol + tetromino.col
+                        outboard[brow][bcol] = 2
+            outfile = open('./Output/test_output' + str(rot_num) + '_' + str(loc_col) + '.txt', 'w')
+            for row in outboard:
+                for col in row:
+                    outfile.write(str(col) + " ")
+                outfile.write('\n')
+            outfile.close()
             # TODO: append to end states
             # TODO: try left and right
+
+        tetromino.rotate()         
+
 
 def _collision_exists(tetromino, board):
     """
@@ -62,13 +100,14 @@ def _collision_exists(tetromino, board):
         (boolean): if tetromino is out of bounds or overlaps an occupied cell
     """
     # (trow, tcol) represent relative location of shape in 4x4 grid
-    for trow in range(len(tetromino.shape)):
-        for tcol in range(trow):
+    for trow in range(4):
+        for tcol in range(4):
             if tetromino.shape[trow][tcol] == 2:  # collision matters (cell found)
 
                 # determine absolute location of tetris cell in board
                 brow = trow + tetromino.row
                 bcol = tcol + tetromino.col
+                # print("bcol: " + str(bcol))
 
                 # check collision
                 if (
@@ -79,10 +118,12 @@ def _collision_exists(tetromino, board):
                     # check collision w/ existing shapes
                     or (board[brow][bcol] != 0)
                 ):
-                    return False
+                    print("invalid at {0}, {1}".format(tetromino.row, tetromino.col))
+                    return True
                 # NOTE: cell is in valid location if this line reached
     # NOTE: all cells in valid location if this line reached
-    return True
+    print("valid at {0}, {1}".format(tetromino.row, tetromino.col))
+    return False
                 
 
 if __name__ == '__main__':
