@@ -1,8 +1,11 @@
 #!/usr/local/bin/python3
 
+import sys
+import numpy as np
+
 from read_board_state import read_board_state
 
-def task_planner():
+def task_planner(path):
     """
     create goal states
         for ea rotation:
@@ -19,7 +22,12 @@ def task_planner():
             min height
             min holes
     """
-    pass
+    board = read_board_state(path)
+    print(board)
 
 if __name__ == '__main__':
-    task_planner()
+    if len(sys.argv) != 2:
+        print("usage: python3 task_planner.py <path>")
+        exit(-1)
+    else:
+        task_planner(sys.argv[1])
