@@ -20,13 +20,6 @@ TODO
 
 
     Task Planner
-        Actions
-            down
-            left
-            right
-            rotate
-        collision-checking
-        find all possible end states given start state
         select end state with best score
 
     Motion Planner
