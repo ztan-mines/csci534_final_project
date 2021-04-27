@@ -2,31 +2,82 @@
 
 import sys
 import numpy as np
+import random
 
 import shapes
 from tetromino import Tetromino
 from read_board_state import read_board_state
 
+
+
 def task_planner(path, shape_num):
     """
-    create goal states
-        for ea rotation:
-            try each col in bounds
-            enforce gravity
-            store as potential goal state
-
-    choose best goal state
-        priority:
-            tetris
-            3 lines cleared
-            2 lines cleared
-            1 line cleared
-            min height
-            min holes
+    TODO: documentation
     """
     board = read_board_state(path)
     tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, -2)
     end_states = _create_end_states(board, tetromino)
+
+    all_stats = []
+    for state in end_states:
+
+        # calc num lines cleared
+        num_lines_cleared = 0
+        state_copy = np.copy(state)
+        state_copy[state_copy > 1] = 1
+        row_sums = state_copy.sum(axis=1)
+        for sum in row_sums:
+            assert sum < 11  # row cannot be overfull
+            assert sum > 0  # row cannot have negative numbers
+            if sum == 10:
+                num_lines_cleared += 1
+
+        # calc height
+        height = 0
+        for i in range(len(row_sums)):
+            if row_sums[i] > 0:
+                height = 20 - (i + 1)
+                break
+
+        # TODO: calc num holes
+        num_holes = 0
+        """
+        for each col
+            for each row
+                if cell is 1
+                    count all zeros below
+        """
+
+
+        all_stats.append((state, num_lines_cleared, height, num_holes))
+
+    # prioritize most lines cleared
+    max_lines_cleared = 0
+    best_lines_cleared = []
+    for stats in all_stats
+        if stats[1] >= max_lines_cleared:
+            max_lines_cleared = stats[1]
+            best_lines_cleared.append(stats)
+
+    # next, prioritize smallest height
+    min_height = 20
+    best_height = []
+    for stats in best_lines_cleared:
+        if stats[2] <= min_height:
+            min_height = stats[2]
+            best_height.append(stats)
+    
+    # finally, prioritize fewest holes
+    min_holes = 200
+    best = []
+    for stats in best_height:
+        if stats[3] <= min_holes:
+            min_holes = stats[3]
+            best.append(stats)
+
+    goal_state = random.choice(best)[0]
+
+    return goal_state
 
 
 def _create_end_states(board, tetromino):  
