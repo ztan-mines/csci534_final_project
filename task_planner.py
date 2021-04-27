@@ -25,23 +25,27 @@ def task_planner(path, shape_num):
             min holes
     """
     board = read_board_state(path)
-    print(board)
-
     tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, -2)
+    end_states = _create_end_states(board, tetromino)
 
-    # create goal states
+
+def _create_end_states(board, tetromino):  
+    """
+    Helper function for task_planner()
+
+    Param:
+        tetromino (Tetromino): shape in play with up-to-date position
+        board (numpy array): current board state
+
+    Returns:
+        end_states (list): list of numpy arrays representing each possible end
+                            state
+    """
+
+    end_states = []
     for rot_num in range(4):  # for each unique rotation of shape (3)
-
-        print()
-        print()
-        for row in tetromino.shape:
-            print(row)
-
         for loc_col in range(-2, 12):  # all possible cols tetromino can be in
-        # for loc_col in range(0, 3):  # all possible cols tetromino can be in
 
-            print()
-            print("next col")
             tetromino.row = -2  # new col, start at top
             tetromino.col = loc_col
 
@@ -52,11 +56,8 @@ def task_planner(path, shape_num):
                     invalid_col = True
                     break
                 tetromino.row += 1
-            
             if invalid_col:
-                print('invalid col')
                 continue
-            print('found first valid row')
 
             # increment row until collision
             while True:
@@ -65,8 +66,7 @@ def task_planner(path, shape_num):
                     tetromino.row -= 1  # go back to last valid row
                     break
 
-
-            # TODO: draw end state
+            # save end state to file
             outboard = np.copy(board)
             for trow in range(4):
                 for tcol in range(4):
@@ -82,10 +82,13 @@ def task_planner(path, shape_num):
                     outfile.write(str(col) + " ")
                 outfile.write('\n')
             outfile.close()
-            # TODO: append to end states
-            # TODO: try left and right
 
-        tetromino.rotate()         
+            # append to end state set
+            end_states.append(outboard)
+
+        tetromino.rotate()
+
+    return end_states
 
 
 def _collision_exists(tetromino, board):
@@ -107,7 +110,6 @@ def _collision_exists(tetromino, board):
                 # determine absolute location of tetris cell in board
                 brow = trow + tetromino.row
                 bcol = tcol + tetromino.col
-                # print("bcol: " + str(bcol))
 
                 # check collision
                 if (
@@ -118,11 +120,9 @@ def _collision_exists(tetromino, board):
                     # check collision w/ existing shapes
                     or (board[brow][bcol] != 0)
                 ):
-                    print("invalid at {0}, {1}".format(tetromino.row, tetromino.col))
                     return True
                 # NOTE: cell is in valid location if this line reached
     # NOTE: all cells in valid location if this line reached
-    print("valid at {0}, {1}".format(tetromino.row, tetromino.col))
     return False
                 
 
@@ -132,30 +132,3 @@ if __name__ == '__main__':
         exit(-1)
     else:
         task_planner(sys.argv[1], sys.argv[2])
-
-    """
-    for each rotation of shape:
-        for each valid col in board:
-            place
-            add to list
-            if can shift right
-                shift right
-                place
-                add to list
-            elif can shift left
-                shift left
-                place
-                add to list
-
-    place():  # enforce gravity but preserve shape
-        while True
-            row = new row
-            if row not valid
-                break
-        write shape to board at row-1
-
-    is_valid(location):
-        True iff
-            in bounds &&
-            board[b_row][b_col] == 0
-    """
