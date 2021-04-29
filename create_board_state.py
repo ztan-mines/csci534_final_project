@@ -37,8 +37,8 @@ def create_board_state():
             break;
 
     # create new file
-    filename = "./BoardStates/random_" + str(int(time.time() * 1000))
-    write_board_state(board, filename)
+    path = "./BoardStates/random_" + str(int(time.time() * 1000))
+    write_board_state(path, board)
 
 def _enforce_gravity(board):
     """

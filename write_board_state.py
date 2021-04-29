@@ -3,7 +3,7 @@
 import sys
 import numpy as np
 
-def write_board_state(board, path):
+def write_board_state(path, board):
     """
     Saves board to file specified by path.
 

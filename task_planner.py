@@ -26,11 +26,6 @@ def task_planner(path, shape_num):
     all_stats = []
     for state in end_states:
 
-        # DEBUG: print board state
-        print()
-        for row in state:
-            print(row)
-
         # count lines cleared
         num_lines_cleared = 0
         state_copy = np.copy(state)
@@ -41,7 +36,6 @@ def task_planner(path, shape_num):
             assert sum >= 0  # row cannot have negative numbers
             if sum == 10:
                 num_lines_cleared += 1
-        print('Num lines cleared:', num_lines_cleared)
 
         # calc height
         height = 0
@@ -49,7 +43,6 @@ def task_planner(path, shape_num):
             if row_sums[i] > 0:
                 height = 20 - i
                 break
-        print('Height:', height)
 
         # count holes (any space below a block is a hole)
         num_holes = 0
@@ -64,14 +57,12 @@ def task_planner(path, shape_num):
                 else:
                     if state[r][c] == 0:  # zero found below nonzero
                         num_holes += 1
-        print('Num holes:', num_holes)
 
         # count empty spaces in bottom row
         num_empty = 0
         for space in state[len(state)-1]:
             if space == 0:
                 num_empty += 1
-        print('Num empty:', num_empty)
 
         all_stats.append(
             (state, num_lines_cleared, height, num_holes, num_empty)
@@ -118,10 +109,7 @@ def task_planner(path, shape_num):
             best.append(stats)
 
     goal_state = random.choice(best)[0]
-    for state in best:
-        print()
-        for row in state:
-            print(row)
+    write_board_state('Output/goal_state.txt', goal_state)
 
     return goal_state
 
@@ -173,8 +161,8 @@ def _create_end_states(board, tetromino):
                         brow = trow + tetromino.row
                         bcol = tcol + tetromino.col
                         outboard[brow][bcol] = 2
-            path = './Output/test_output' + str(rot_num) + '_' + str(loc_col) + '.txt'
-            write_board_state(outboard, path)
+            path = './Output/possible_state' + str(rot_num) + '_' + str(loc_col) + '.txt'
+            write_board_state(path, outboard)
 
             # append to end state set
             end_states.append(outboard)
