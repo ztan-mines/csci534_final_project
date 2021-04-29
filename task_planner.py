@@ -26,6 +26,11 @@ def task_planner(path, shape_num):
     all_stats = []
     for state in end_states:
 
+        # DEBUG: print board state
+        print()
+        for row in state:
+            print(row)
+
         # calc num lines cleared
         num_lines_cleared = 0
         state_copy = np.copy(state)
@@ -36,23 +41,30 @@ def task_planner(path, shape_num):
             assert sum >= 0  # row cannot have negative numbers
             if sum == 10:
                 num_lines_cleared += 1
+        print('Num lines cleared:', num_lines_cleared)
 
         # calc height
         height = 0
         for i in range(len(row_sums)):
             if row_sums[i] > 0:
-                height = 20 - (i + 1)
+                height = 20 - i
                 break
+        print('Height:', height)
 
-        # TODO: calc num holes
+        # calc num holes (any space below a block is a hole)
         num_holes = 0
-        """
-        for each col
-            for each row
-                if cell is 1
-                    count all zeros below
-        """
+        for c in range(len(state[0])):
 
+            start_counting_holes = False
+            for r in range(len(state)):
+
+                if not start_counting_holes:
+                    if state[r][c] > 0:  # potential ceiling block found
+                        start_counting_holes = True
+                else:
+                    if state[r][c] == 0:  # zero found below nonzero
+                        num_holes += 1
+        print('Num holes:', num_holes)
 
         all_stats.append((state, num_lines_cleared, height, num_holes))
 
