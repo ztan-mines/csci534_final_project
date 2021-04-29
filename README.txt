@@ -20,15 +20,25 @@ TODO
 
 
     Task Planner
-        select end state with best score
+        test
 
     Motion Planner
+        determine motion plan
+            get start state
+            translate left/right to proper column
+            increase row until collision
         print steps from start state to end state
+
+    Experiments
+        Compare to previous work
+            Code Bullet's algorithm
+            advantages
+                less complex, more computationally efficient
+            disadvantages
+                does not explore all possible end states
+
 
 --------------------------------------------------------------------------------
 NOTES
 
-    illegal move if going to draw in occupied space
-
-    matrix rotation for rotating pieces
-        https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/
+    BoardStates/random_1619712341398

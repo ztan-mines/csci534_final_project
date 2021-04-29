@@ -7,12 +7,17 @@ import random
 import shapes
 from tetromino import Tetromino
 from read_board_state import read_board_state
+from write_board_state import write_board_state
 
 
 
 def task_planner(path, shape_num):
     """
-    TODO: documentation
+    Determine the best goal state for a given initial board state and tetromino
+
+    Params:
+        path (string): file location of initial board state
+        shape_num (int): tetromino identifier
     """
     board = read_board_state(path)
     tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, -2)
@@ -28,7 +33,7 @@ def task_planner(path, shape_num):
         row_sums = state_copy.sum(axis=1)
         for sum in row_sums:
             assert sum < 11  # row cannot be overfull
-            assert sum > 0  # row cannot have negative numbers
+            assert sum >= 0  # row cannot have negative numbers
             if sum == 10:
                 num_lines_cleared += 1
 
@@ -54,7 +59,7 @@ def task_planner(path, shape_num):
     # prioritize most lines cleared
     max_lines_cleared = 0
     best_lines_cleared = []
-    for stats in all_stats
+    for stats in all_stats:
         if stats[1] >= max_lines_cleared:
             max_lines_cleared = stats[1]
             best_lines_cleared.append(stats)
@@ -127,12 +132,8 @@ def _create_end_states(board, tetromino):
                         brow = trow + tetromino.row
                         bcol = tcol + tetromino.col
                         outboard[brow][bcol] = 2
-            outfile = open('./Output/test_output' + str(rot_num) + '_' + str(loc_col) + '.txt', 'w')
-            for row in outboard:
-                for col in row:
-                    outfile.write(str(col) + " ")
-                outfile.write('\n')
-            outfile.close()
+            path = './Output/test_output' + str(rot_num) + '_' + str(loc_col) + '.txt'
+            write_board_state(outboard, path)
 
             # append to end state set
             end_states.append(outboard)
