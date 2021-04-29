@@ -31,7 +31,7 @@ def task_planner(path, shape_num):
         for row in state:
             print(row)
 
-        # calc num lines cleared
+        # count lines cleared
         num_lines_cleared = 0
         state_copy = np.copy(state)
         state_copy[state_copy > 1] = 1
@@ -51,7 +51,7 @@ def task_planner(path, shape_num):
                 break
         print('Height:', height)
 
-        # calc num holes (any space below a block is a hole)
+        # count holes (any space below a block is a hole)
         num_holes = 0
         for c in range(len(state[0])):
 
@@ -66,33 +66,62 @@ def task_planner(path, shape_num):
                         num_holes += 1
         print('Num holes:', num_holes)
 
-        all_stats.append((state, num_lines_cleared, height, num_holes))
+        # count empty spaces in bottom row
+        num_empty = 0
+        for space in state[len(state)-1]:
+            if space == 0:
+                num_empty += 1
+        print('Num empty:', num_empty)
+
+        all_stats.append(
+            (state, num_lines_cleared, height, num_holes, num_empty)
+        )
 
     # prioritize most lines cleared
     max_lines_cleared = 0
-    best_lines_cleared = []
     for stats in all_stats:
         if stats[1] >= max_lines_cleared:
             max_lines_cleared = stats[1]
+    best_lines_cleared = []
+    for stats in all_stats:
+        if stats[1] >= max_lines_cleared:
             best_lines_cleared.append(stats)
 
     # next, prioritize smallest height
     min_height = 20
-    best_height = []
     for stats in best_lines_cleared:
         if stats[2] <= min_height:
             min_height = stats[2]
+    best_height = []
+    for stats in best_lines_cleared:
+        if stats[2] <= min_height:
             best_height.append(stats)
     
-    # finally, prioritize fewest holes
+    # prioritize fewest holes
     min_holes = 200
-    best = []
     for stats in best_height:
         if stats[3] <= min_holes:
             min_holes = stats[3]
+    best_holes = []
+    for stats in best_height:
+        if stats[3] <= min_holes:
+            best_holes.append(stats)
+
+    # finally, prioritize filling bottom row
+    min_empty_spaces = 10
+    for stats in best_holes:
+        if stats[4] <= min_empty_spaces:
+            min_empty_spaces = stats[4]
+    best = []
+    for stats in best_holes:
+        if stats[4] <= min_empty_spaces:
             best.append(stats)
 
     goal_state = random.choice(best)[0]
+    for state in best:
+        print()
+        for row in state:
+            print(row)
 
     return goal_state
 
