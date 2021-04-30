@@ -51,11 +51,4 @@ Z = np.array([
     [0, 0, 0, 0]
 ])
 
-Ben = np.array([
-    [2, 2, 2, 2],
-    [2, 0, 0, 2],
-    [2, 0, 0, 2],
-    [2, 2, 2, 2]
-])
-
-shapes = [I, O, T, J, L, S, Z, Ben]
+shapes = [I, O, T, J, L, S, Z]
