@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3
 
+import os
 import numpy as np
 
 import shapes
@@ -80,13 +81,14 @@ class MotionPlanner:
                     bcol = tcol + self.tetromino.col
                     self.board[brow][bcol] = 2
 
-    def save_path(self):
+    def save_path(self, outpath):
         """
         Save each element in solution path to its own file in Solution/ dir
         """
+        os.mkdir(outpath)
         i = 0
         for path_step in self.path:
-            self.path = 'Solution/step_' + str(i).zfill(2)
+            self.path = outpath + 'step_' + str(i).zfill(2)
             write_board_state(self.path, path_step)
             i += 1
     

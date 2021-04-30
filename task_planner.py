@@ -11,15 +11,17 @@ from write_board_state import write_board_state
 
 
 
-def task_planner(path, shape_num):
+def task_planner(path, shape_num, outpath):
     """
     Determine the best goal state for a given initial board state and tetromino
 
     Params:
         path (string): file location of initial board state
         shape_num (int): tetromino identifier
+        outpath (string): file location of result board state
     """
     board = read_board_state(path)
+    board[board > 1] = 1
     tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, -2)
     end_states = _create_end_states(board, tetromino)
 
@@ -110,8 +112,8 @@ def task_planner(path, shape_num):
         if stats[4] <= min_empty_spaces:
             best.append(stats)
 
-    goal_state = random.choice(best)[0]
-    write_board_state('Output/goal_state.txt', goal_state[0])
+    goal_state = random.choice(best)[0][0]
+    write_board_state(outpath, goal_state)
 
     return goal_state
 
