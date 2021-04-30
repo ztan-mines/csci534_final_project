@@ -75,6 +75,17 @@ def task_planner(path, shape_num, outpath):
 
     best_stats = all_stats
 
+    # prioritize filling bottom row
+    min_empty_spaces = 10
+    for stats in best_stats:
+        if stats[4] <= min_empty_spaces:
+            min_empty_spaces = stats[4]
+    temp_best = []
+    for stats in best_stats:
+        if stats[4] <= min_empty_spaces:
+            temp_best.append(stats)
+    best_stats = temp_best
+
     # prioritize smallest height
     min_height = 20
     for stats in best_stats:
@@ -107,17 +118,6 @@ def task_planner(path, shape_num, outpath):
     temp_best = []
     for stats in best_stats:
         if stats[1] >= max_lines_cleared:
-            temp_best.append(stats)
-    best_stats = temp_best
-
-    # prioritize filling bottom row
-    min_empty_spaces = 10
-    for stats in best_stats:
-        if stats[4] <= min_empty_spaces:
-            min_empty_spaces = stats[4]
-    temp_best = []
-    for stats in best_stats:
-        if stats[4] <= min_empty_spaces:
             temp_best.append(stats)
     best_stats = temp_best
 
@@ -190,6 +190,7 @@ def _create_end_states(board, tetromino):
             end_states.append((outboard, end_pose))
 
         tetromino.rotate()
+
 
     return end_states
 
