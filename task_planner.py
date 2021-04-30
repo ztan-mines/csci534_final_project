@@ -78,7 +78,7 @@ def task_planner(path, shape_num):
         if stats[1] >= max_lines_cleared:
             best_lines_cleared.append(stats)
 
-    # next, prioritize smallest height
+    # prioritize smallest height
     min_height = 20
     for stats in best_lines_cleared:
         if stats[2] <= min_height:
@@ -98,7 +98,7 @@ def task_planner(path, shape_num):
         if stats[3] <= min_holes:
             best_holes.append(stats)
 
-    # finally, prioritize filling bottom row
+    # prioritize filling bottom row
     min_empty_spaces = 10
     for stats in best_holes:
         if stats[4] <= min_empty_spaces:
@@ -155,13 +155,18 @@ def _create_end_states(board, tetromino):
             outboard = np.copy(board)
             for trow in range(4):
                 for tcol in range(4):
-                    if tetromino.shape[trow][tcol] == 2:  # collision matters (cell found)
+                    if tetromino.shape[trow][tcol] == 2:  # collision matters 
+                                                            # (cell found)
 
                         # determine absolute location of tetris cell in board
                         brow = trow + tetromino.row
                         bcol = tcol + tetromino.col
                         outboard[brow][bcol] = 2
-            path = './Output/possible_state' + str(rot_num) + '_' + str(loc_col) + '.txt'
+            path = str(
+                './Output/possible_state' 
+                + str(rot_num) 
+                + '_' + str(loc_col) + '.txt'
+            )
             write_board_state(path, outboard)
 
             # append to end state set
@@ -174,7 +179,7 @@ def _create_end_states(board, tetromino):
 
 def _collision_exists(tetromino, board):
     """
-    Helper function for task_panner()
+    Helper function for task_planner()
 
     Param:
         tetromino (Tetromino): shape in play with up-to-date position
