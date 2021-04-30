@@ -135,7 +135,7 @@ def _create_end_states(board, tetromino):
 
             tetromino.row = -2  # new col, start at top
             tetromino.col = loc_col
-            end_pose = [0, 0]
+            end_pose = [0, 0, 0]
 
             # find first valid row
             invalid_col = False
@@ -157,6 +157,7 @@ def _create_end_states(board, tetromino):
             # save end state to file
             end_pose[0] = tetromino.row
             end_pose[1] = tetromino.col
+            end_pose[2] = rot_num
             outboard = np.copy(board)
             for trow in range(4):
                 for tcol in range(4):

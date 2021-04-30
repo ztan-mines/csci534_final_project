@@ -16,19 +16,28 @@ class MotionPlanner:
     """
 
     path = []
-    initial_pose = [0, 5]
 
     def __init__(self, board, goal_pose, tetromino):
         self.board = board
         self.goal_pose = goal_pose
         self.tetromino = tetromino
+        self.save_to_path()
 
     def solve(self):
+
+        # rotate until in correct orientation
+        rot_num = 0
+        while rot_num != self.goal_pose[2]:
+            self.tetromino.rotate()
+            rot_num += 1
+            self.save_to_path()
+
 
         # shift left/right until in correct column
         while self.tetromino.col != self.goal_pose[1]:
             if self.tetromino.col - self.goal_pose[1] > 0:
                 self.tetromino.col -= 1
+                self.save_to_path()
             else:
                 self.tetromino.col += 1
                 self.save_to_path()
