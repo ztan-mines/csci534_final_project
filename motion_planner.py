@@ -2,6 +2,7 @@
 
 import numpy as np
 
+import shapes
 from write_board_state import write_board_state
 
 class MotionPlanner:
@@ -25,12 +26,14 @@ class MotionPlanner:
 
     def solve(self):
 
-        # rotate until in correct orientation
-        rot_num = 0
-        while rot_num != self.goal_pose[2]:
-            self.tetromino.rotate()
-            rot_num += 1
-            self.save_to_path()
+        if not np.array_equal(self.tetromino.shape, shapes.shapes[1]):
+
+            # rotate until in correct orientation
+            rot_num = 0
+            while rot_num != self.goal_pose[2]:
+                self.tetromino.rotate()
+                rot_num += 1
+                self.save_to_path()
 
 
         # shift left/right until in correct column
