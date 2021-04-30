@@ -8,7 +8,7 @@ import shapes
 from tetromino import Tetromino
 from read_board_state import read_board_state
 from write_board_state import write_board_state
-
+from create_board_state import clear_complete_rows
 
 
 def task_planner(path, shape_num, outpath):
@@ -22,6 +22,7 @@ def task_planner(path, shape_num, outpath):
     """
     board = read_board_state(path)
     board[board > 1] = 1
+    _, board = clear_complete_rows(board)
     tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, -2)
     end_states = _create_end_states(board, tetromino)
 
@@ -47,6 +48,8 @@ def task_planner(path, shape_num, outpath):
             if row_sums[i] > 0:
                 height = 20 - i
                 break
+        if height > 20:
+            exit()
 
         # count holes (any space below a block is a hole)
         num_holes = 0
@@ -73,6 +76,17 @@ def task_planner(path, shape_num, outpath):
         )
 
     best_stats = all_stats
+    
+    # prioritize fewest holes
+    min_holes = 200
+    for stats in best_stats:
+        if stats[3] <= min_holes:
+            min_holes = stats[3]
+    temp_best = []
+    for stats in best_stats:
+        if stats[3] <= min_holes:
+            temp_best.append(stats)
+    best_stats = temp_best
 
     # prioritize most lines cleared
     max_lines_cleared = 0
@@ -95,17 +109,6 @@ def task_planner(path, shape_num, outpath):
         if stats[2] <= min_height:
             temp_best.append(stats)
     best_stats = temp_best
-    
-    # prioritize fewest holes
-    min_holes = 200
-    for stats in best_stats:
-        if stats[3] <= min_holes:
-            min_holes = stats[3]
-    temp_best = []
-    for stats in best_stats:
-        if stats[3] <= min_holes:
-            temp_best.append(stats)
-    best_stats = temp_best
 
     # prioritize filling bottom row
     min_empty_spaces = 10
@@ -118,8 +121,8 @@ def task_planner(path, shape_num, outpath):
             temp_best.append(stats)
     best_stats = temp_best
 
-    goal_state = random.choice(best_stats)[0][0]
-    write_board_state(outpath, goal_state)
+    goal_state = random.choice(best_stats)[0]
+    write_board_state(outpath, goal_state[0])
 
     return goal_state
 

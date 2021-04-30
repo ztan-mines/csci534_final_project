@@ -17,12 +17,13 @@ class MotionPlanner:
     pass plan to demonstrator (shows plan step by step)
     """
 
-    path = []
-
     def __init__(self, board, goal_pose, tetromino):
+        self.path = []
         self.board = board
         self.goal_pose = goal_pose
         self.tetromino = tetromino
+
+        self.board[self.board > 1] = 1
         self.save_to_path()
 
     def solve(self):

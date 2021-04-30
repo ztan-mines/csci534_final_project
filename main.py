@@ -3,6 +3,8 @@
 import os
 import shutil
 import sys
+import time
+import random
 import numpy as np
 
 from task_planner import task_planner
@@ -11,7 +13,7 @@ from read_board_state import read_board_state
 from tetromino import Tetromino
 import shapes
 
-def main(state_in_dir, input_shapes):
+def main(state_in_dir):
 
 
     # clear old files
@@ -22,7 +24,10 @@ def main(state_in_dir, input_shapes):
     
     # solve
     i = 0
-    for shape_num in input_shapes:
+    random.seed(int(time.time() * 1000))
+    while True:
+
+        shape_num = random.choice([0, 1, 2, 3, 4, 5, 6])
 
         # solve this shape
         state_out_dir = 'BoardStates/result/result_' + str(i).zfill(2)
@@ -30,6 +35,7 @@ def main(state_in_dir, input_shapes):
 
         board = read_board_state(state_in_dir)
         tetromino = Tetromino(shapes.shapes[int(shape_num)], 0, 4)
+        # print(shape_num, board, goal_state[1])
         motion_planner = MotionPlanner(board, goal_state[1], tetromino)
         
         path_out_dir = 'Solution/result_' + str(i).zfill(2) + '/'
@@ -41,11 +47,11 @@ def main(state_in_dir, input_shapes):
         i += 1
 
 if __name__ == "__main__":
-    if len(sys.argv) != 7:
+    if len(sys.argv) != 2:
         print(
             "usage: python3 main.py " 
-            + "<path> "
-            + "<shape_num> <shape_num> <shape_num> <shape_num> <shape_num>")
+            + "<start_state_path> "
+        )
         exit(-1)
     else:
-        main(sys.argv[1], sys.argv[2:])
+        main(sys.argv[1])

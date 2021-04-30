@@ -62,7 +62,7 @@ def _enforce_gravity(board):
                 height -= 1
     return board.T
 
-def _clear_complete_rows(board, board_width):
+def clear_complete_rows(board, board_width=10):
     """
     Helper function for create_board_state()
     
@@ -77,13 +77,14 @@ def _clear_complete_rows(board, board_width):
         (boolean): whether complete rows were found
         board (numpy array): final board state with complete rows removed
     """
+    did_clear = False
     for row in range(len(board)):
         if sum(board[row]) == board_width:
             # row is complete, remove and replace at top
             board = np.delete(board, row, 0)
             board = np.insert(board, 0, np.zeros([board_width]), 0)
-            return True, board
-    return False, board
+            did_clear = True
+    return did_clear, board
     
 if __name__ == "__main__":
     create_board_state()

@@ -14,5 +14,8 @@ _, _, filenames = next(walk(dir_name))
 filenames.sort()
 
 for file in filenames:
+    print()
+    print(file)
+    print()
     display_board_state(dir_name + file)
 
