@@ -48,8 +48,6 @@ def task_planner(path, shape_num, outpath):
             if row_sums[i] > 0:
                 height = 20 - i
                 break
-        if height > 20:
-            exit()
 
         # count holes (any space below a block is a hole)
         num_holes = 0
@@ -76,6 +74,19 @@ def task_planner(path, shape_num, outpath):
         )
 
     best_stats = all_stats
+
+    # prioritize smallest height
+    min_height = 20
+    for stats in best_stats:
+        if stats[2] <= min_height:
+            min_height = stats[2]
+    temp_best = []
+    for stats in best_stats:
+        if stats[2] <= min_height:
+            temp_best.append(stats)
+    best_stats = temp_best
+    if min_height >= 20:
+        return 'Game Over'
     
     # prioritize fewest holes
     min_holes = 200
@@ -96,17 +107,6 @@ def task_planner(path, shape_num, outpath):
     temp_best = []
     for stats in best_stats:
         if stats[1] >= max_lines_cleared:
-            temp_best.append(stats)
-    best_stats = temp_best
-
-    # prioritize smallest height
-    min_height = 20
-    for stats in best_stats:
-        if stats[2] <= min_height:
-            min_height = stats[2]
-    temp_best = []
-    for stats in best_stats:
-        if stats[2] <= min_height:
             temp_best.append(stats)
     best_stats = temp_best
 

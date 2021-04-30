@@ -3,6 +3,7 @@
 import sys
 import pygame
 import numpy as np
+import time
 
 from read_board_state import read_board_state
 
@@ -22,13 +23,13 @@ res = (400, 800)
 
 cell_dim = res[0]/12
 
-def display_board_state(path):
+def display_board_state(path, autoclose=-1):
     """
     Displays a given board state graphically given its filepath
 
     Params:
         path (string): path to file starting from this file's directory
-        res (tuple): desired window resolution
+        autoclose (int): ms delay before closing window (-1 waits on user)
 
     Returns:
         None: Output is a window displaying the board state
@@ -43,9 +44,13 @@ def display_board_state(path):
 
     # display board until window closed
     done = False
+    ti = int(time.time() * 1000)
     while not done:
 
         # check end
+        delta_t = int(time.time() * 1000) - ti
+        if (delta_t >= autoclose) and (autoclose > -1):
+            done = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
