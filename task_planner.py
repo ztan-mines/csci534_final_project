@@ -24,7 +24,9 @@ def task_planner(path, shape_num):
     end_states = _create_end_states(board, tetromino)
 
     all_stats = []
-    for state in end_states:
+    for item in end_states:
+
+        state = item[0]
 
         # count lines cleared
         num_lines_cleared = 0
@@ -65,7 +67,7 @@ def task_planner(path, shape_num):
                 num_empty += 1
 
         all_stats.append(
-            (state, num_lines_cleared, height, num_holes, num_empty)
+            (item, num_lines_cleared, height, num_holes, num_empty)
         )
 
     # prioritize most lines cleared
@@ -109,7 +111,7 @@ def task_planner(path, shape_num):
             best.append(stats)
 
     goal_state = random.choice(best)[0]
-    write_board_state('Output/goal_state.txt', goal_state)
+    write_board_state('Output/goal_state.txt', goal_state[0])
 
     return goal_state
 
@@ -133,6 +135,7 @@ def _create_end_states(board, tetromino):
 
             tetromino.row = -2  # new col, start at top
             tetromino.col = loc_col
+            end_pose = [0, 0]
 
             # find first valid row
             invalid_col = False
@@ -152,6 +155,8 @@ def _create_end_states(board, tetromino):
                     break
 
             # save end state to file
+            end_pose[0] = tetromino.row
+            end_pose[1] = tetromino.col
             outboard = np.copy(board)
             for trow in range(4):
                 for tcol in range(4):
@@ -170,7 +175,7 @@ def _create_end_states(board, tetromino):
             write_board_state(path, outboard)
 
             # append to end state set
-            end_states.append(outboard)
+            end_states.append((outboard, end_pose))
 
         tetromino.rotate()
 
