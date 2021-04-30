@@ -72,47 +72,53 @@ def task_planner(path, shape_num, outpath):
             (item, num_lines_cleared, height, num_holes, num_empty)
         )
 
+    best_stats = all_stats
+
     # prioritize most lines cleared
     max_lines_cleared = 0
-    for stats in all_stats:
+    for stats in best_stats:
         if stats[1] >= max_lines_cleared:
             max_lines_cleared = stats[1]
-    best_lines_cleared = []
-    for stats in all_stats:
+    temp_best = []
+    for stats in best_stats:
         if stats[1] >= max_lines_cleared:
-            best_lines_cleared.append(stats)
+            temp_best.append(stats)
+    best_stats = temp_best
 
     # prioritize smallest height
     min_height = 20
-    for stats in best_lines_cleared:
+    for stats in best_stats:
         if stats[2] <= min_height:
             min_height = stats[2]
-    best_height = []
-    for stats in best_lines_cleared:
+    temp_best = []
+    for stats in best_stats:
         if stats[2] <= min_height:
-            best_height.append(stats)
+            temp_best.append(stats)
+    best_stats = temp_best
     
     # prioritize fewest holes
     min_holes = 200
-    for stats in best_height:
+    for stats in best_stats:
         if stats[3] <= min_holes:
             min_holes = stats[3]
-    best_holes = []
-    for stats in best_height:
+    temp_best = []
+    for stats in best_stats:
         if stats[3] <= min_holes:
-            best_holes.append(stats)
+            temp_best.append(stats)
+    best_stats = temp_best
 
     # prioritize filling bottom row
     min_empty_spaces = 10
-    for stats in best_holes:
+    for stats in best_stats:
         if stats[4] <= min_empty_spaces:
             min_empty_spaces = stats[4]
-    best = []
-    for stats in best_holes:
+    temp_best = []
+    for stats in best_stats:
         if stats[4] <= min_empty_spaces:
-            best.append(stats)
+            temp_best.append(stats)
+    best_stats = temp_best
 
-    goal_state = random.choice(best)[0][0]
+    goal_state = random.choice(best_stats)[0][0]
     write_board_state(outpath, goal_state)
 
     return goal_state
