@@ -19,6 +19,9 @@ def task_planner(path, shape_num, outpath):
         path (string): file location of initial board state
         shape_num (int): tetromino identifier
         outpath (string): file location of result board state
+    
+    Returns:
+        goal_state (numpy array): array consisting of board state and pose
     """
     board = read_board_state(path)
     board[board > 1] = 1
@@ -75,14 +78,14 @@ def task_planner(path, shape_num, outpath):
 
     best_stats = all_stats
 
-    # prioritize filling bottom row
-    min_empty_spaces = 10
+    # prioritize most lines cleared
+    max_lines_cleared = 0
     for stats in best_stats:
-        if stats[4] <= min_empty_spaces:
-            min_empty_spaces = stats[4]
+        if stats[1] >= max_lines_cleared:
+            max_lines_cleared = stats[1]
     temp_best = []
     for stats in best_stats:
-        if stats[4] <= min_empty_spaces:
+        if stats[1] >= max_lines_cleared:
             temp_best.append(stats)
     best_stats = temp_best
 
@@ -110,14 +113,14 @@ def task_planner(path, shape_num, outpath):
             temp_best.append(stats)
     best_stats = temp_best
 
-    # prioritize most lines cleared
-    max_lines_cleared = 0
+    # prioritize filling bottom row
+    min_empty_spaces = 10
     for stats in best_stats:
-        if stats[1] >= max_lines_cleared:
-            max_lines_cleared = stats[1]
+        if stats[4] <= min_empty_spaces:
+            min_empty_spaces = stats[4]
     temp_best = []
     for stats in best_stats:
-        if stats[1] >= max_lines_cleared:
+        if stats[4] <= min_empty_spaces:
             temp_best.append(stats)
     best_stats = temp_best
 

@@ -8,13 +8,15 @@ from write_board_state import write_board_state
 
 class MotionPlanner:
     """
-    load board state
-    get tetromino
-    find possible goals
-    find best goal
-    pass best goal to motion planner
-    print plan
-    pass plan to demonstrator (shows plan step by step)
+    Constructs a path plan given an initial board, goal_pose, and tetromino.
+
+    Params:
+        board (numpy array): initial board state
+        goal_pose (tuple): (rotation, x, y) description of goal pose
+        tetromino (Tetromino): input shape to construct path plan for
+
+    Returns:
+        None: Saves path plan to Solution/ directory
     """
 
     def __init__(self, board, goal_pose, tetromino):
