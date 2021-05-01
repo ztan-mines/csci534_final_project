@@ -40,6 +40,10 @@ USAGE
 The prioritization scheme of the task planner can be modified to your liking.
 Simply rearrange the code blocks in lines 78-122 of task_planner.py.
 
+You can also replay the best results from each heuristic I tested by running:
+    * python3 replay.py ./hNbest/result/ <frame_delay_in_ms>
+    * Note: replace N with the desired heuristic identifier (0-3)
+
 ================================================================================
 DOCUMENTATION
 --------------------------------------------------------------------------------
